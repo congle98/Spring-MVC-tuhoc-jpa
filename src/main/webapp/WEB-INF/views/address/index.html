@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout :: head">
+
+</head>
+<body>
+<h3>Address Management</h3>
+<p>
+    <a th:href="@{/address/create}">
+        Add new address
+    </a>
+<p th:text="${message}"></p>
+</p>
+<table id = "tablemodels">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>thao tác</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="a : ${addresses}">
+        <td th:text="${a.name}"></td>
+        <td><a th:href="@{address/findStudents/__${a.getId()}__}">xem danh sách học sinh</a></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

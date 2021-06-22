@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout :: head">
+
+</head>
+<body>
+<h3>Add Student</h3>
+<p>
+  <a th:href="@{/student}">
+    Back to student list
+  </a>
+</p>
+<p th:text="${message}"></p>
+<div>
+  <form action="/student/update" th:object="${studentForm}"
+        method="post" novalidate="novalidate" enctype="multipart/form-data">
+    <input type="text" hidden th:field="*{id}"/>
+    <div>
+      <label>Name</label>
+      <input type="text" th:field="*{name}"/>
+    </div>
+    <div>
+      <label>Date Of Birth</label>
+      <input type="date" th:field="*{dob}"/>
+<!--      nếu không dùng formatter thì sẽ phải ntn-->
+<!--      <input type="date" name="dobStr" th:value="*{dob.toString()}"/>-->
+    </div>
+    <div>
+      <label>Address</label>
+      <select name="address">
+        <option th:each="a : ${addressList}"
+                th:value="${a.id}"
+                th:text="${a.name}"
+                th:selected="(${studentForm.address}) and (${a.id} == *{address.id})"></option>
+      </select>
+    </div>
+    <div>
+      <label>Thuộc lớp</label>
+      <select name="classRoom">
+        <option th:each="c : ${classRoomList}"
+                th:value="${c.id}"
+                th:text="${c.name}"
+                th:selected="(${studentForm.classRoom}) and (${c.id} == *{classRoom.id})"></option>
+      </select>
+    </div>
+    <div>
+      <label>Image</label>
+      <input type="file" th:field="*{image}"/>
+    </div>
+    <input type="submit" value="Save"/>
+  </form>
+</div>
+
+<footer th:replace="/layout :: footer"></footer>
+</body>
+</html>

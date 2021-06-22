@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout :: head">
+
+</head>
+<body>
+<h3>ClassRoom Management</h3>
+<p>
+    <a th:href="@{/classRoom/create}">
+        Add new classRoom
+    </a>
+<p th:text="${message}"></p>
+</p>
+<table id = "tablemodels">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>thao tác</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="c : ${classRooms}">
+        <td th:text="${c.name}"></td>
+        <td><a th:href="@{classRoom/findStudents/__${c.getId()}__}">xem danh sách học sinh</a></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout :: head">
+
+</head>
+<body>
+<h3>Add Address</h3>
+<p>
+    <a th:href="@{/address}">
+        Back to address list
+    </a>
+</p>
+<p th:text="${message}"></p>
+<div>
+    <form th:action="@{/address/save}" th:object="${address}"
+          method="post" novalidate="novalidate"  >
+<!--        novalidate chỉ là ko check trước khi gửi thôiiiiiiiiiiiiiiii dcm nó cayyyyyyyyyyy-->
+        <div>
+            <label>Name</label>
+            <td><input th:field="*{name}"></td>
+            <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">sfdsfsd Error</td>
+        </div>
+        <input type="submit" value="Save"/>
+    </form>
+</div>
+
+<footer th:replace="/layout :: footer"></footer>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout :: head">
+
+</head>
+<body>
+<h3>Add teacher</h3>
+<p>
+  <a th:href="@{/teacher}">
+    Back to teacher list
+  </a>
+</p>
+<p th:text="${message}"></p>
+<!--<div>-->
+<!--  <form action="/student/delete"-->
+<!--        method="post" novalidate="novalidate" enctype="multipart/form-data">-->
+<!--    <input name="id" type="hidden" th:value="${student.get().getId()}">-->
+<!--    <div>-->
+<!--      <label>Name</label>-->
+<!--      <p  th:text="${student.get().getName()}"/>-->
+<!--    </div>-->
+<!--    <div>-->
+<!--      <label>Date Of Birth</label>-->
+<!--      <p  th:text="${student.get().getDob()}"/>-->
+<!--    </div>-->
+<!--    <div>-->
+<!--      <label>Address</label>-->
+<!--      <p th:text="${student.get().address.getName()}"/>-->
+<!--    </div>-->
+<!--    <div>-->
+<!--      <label>Thuộc lớp</label>-->
+<!--      <p th:text="*{student.get().classRoom.getName()}"/>-->
+<!--    </div>-->
+<!--    <div>-->
+<!--      <label>Image</label>-->
+<!--      <img width="100" height="100" th:src="@{'/image/'+${student.get().getImage()}}"/>-->
+<!--    </div>-->
+<!--    <input type="submit" value="Save"/>-->
+<!--  </form>-->
+<!--</div>-->
+
+                                      <!--HAI CÁCH ĐỀU OKE-->
+                      <!--TÊN TRONG object PHẢI GIỐNG TÊN GỬI ĐI Ở CONTROLLER-->
+
+<div>
+  <form action="/student/delete"
+        method="post" novalidate="novalidate" enctype="multipart/form-data" th:object="${teacher}">
+    <input name="id" type="hidden" th:value="${teacher.get().getId()}">
+    <div>
+      <label>Name</label>
+      <p  th:text="*{get().getName()}"/>
+    </div>
+    <div>
+      <label>Date Of Birth</label>
+      <p  th:text="${teacher.get().getDob()}"/>
+    </div>
+    <div>
+      <label>Address</label>
+      <p th:text="${teacher.get().address.getName()}"/>
+    </div>
+    <div>
+      <label>Thuộc lớp</label>
+      <p th:text="${teacher.get().classRoom.getName()}"/>
+    </div>
+    <div>
+      <label>Thuộc lớp test print của format và phải trong field</label>
+      <input type="text" th:field="*{classRoom}"/>
+    </div>
+    <div>
+      <label>Image</label>
+      <img width="100" height="100" th:src="@{'/image/'+${teacher.get().getImage()}}"/>
+    </div>
+    <input type="submit" value="Save"/>
+  </form>
+</div>
+
+<footer th:replace="/layout :: footer"></footer>
+</body>
+</html>
