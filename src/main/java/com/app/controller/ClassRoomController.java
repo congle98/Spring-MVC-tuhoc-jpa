@@ -1,5 +1,6 @@
 package com.app.controller;
 
+import com.app.exception.NotFoundException;
 import com.app.model.ClassRoom;
 import com.app.model.Student;
 import com.app.service.classroom.IClassRoomService;
@@ -46,7 +47,7 @@ public class ClassRoomController {
         return modelAndView;
     }
     @GetMapping("/findStudents/{id}")
-    public ModelAndView listStudents(@PathVariable Long id){
+    public ModelAndView listStudents(@PathVariable Long id) throws NotFoundException {
         Optional<ClassRoom> classRoom = classRoomService.findById(id);
         Iterable<Student> students = studentService.findAllByClassRoom(classRoom.get());
         ModelAndView modelAndView = new ModelAndView("classroom/showStudents");

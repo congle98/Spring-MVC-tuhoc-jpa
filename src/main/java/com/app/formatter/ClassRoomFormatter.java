@@ -1,5 +1,6 @@
 package com.app.formatter;
 
+import com.app.exception.NotFoundException;
 import com.app.model.Address;
 import com.app.model.ClassRoom;
 import com.app.service.address.IAddressService;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @Component
 public class ClassRoomFormatter implements Formatter<ClassRoom> {
+    @Autowired
     private IClassRoomService classRoomService;
 
     @Autowired
@@ -24,7 +26,12 @@ public class ClassRoomFormatter implements Formatter<ClassRoom> {
 
     @Override
     public ClassRoom parse(String text, Locale locale) throws ParseException {
-        Optional<ClassRoom> classRoomOptional = classRoomService.findById(Long.parseLong(text));
+        Optional<ClassRoom> classRoomOptional = null;
+        try {
+            classRoomOptional = classRoomService.findById(Long.parseLong(text));
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
         return classRoomOptional.orElse(null);
         //nếu ko có thì trả về null còn nếu ko có null ở đây thì optional nó sẽ trả về rỗng
     }

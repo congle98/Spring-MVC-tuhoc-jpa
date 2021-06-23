@@ -1,5 +1,6 @@
 package com.app.formatter;
 
+import com.app.exception.NotFoundException;
 import com.app.model.Address;
 import com.app.service.address.IAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,12 @@ public class AddressFormatter implements Formatter<Address> {
 
     @Override
     public Address parse(String text, Locale locale) throws ParseException {
-        Optional<Address> addressOptional = addressService.findById(Long.parseLong(text));
+        Optional<Address> addressOptional = null;
+        try {
+            addressOptional = addressService.findById(Long.parseLong(text));
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        }
         return addressOptional.orElse(null);
     }
 

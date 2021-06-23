@@ -1,5 +1,6 @@
 package com.app.service.student;
 
+import com.app.exception.NotFoundException;
 import com.app.model.Address;
 import com.app.model.ClassRoom;
 import com.app.model.Student;
@@ -22,8 +23,12 @@ public class StudentService implements IStudentService{
     }
 
     @Override
-    public Optional<Student> findById(Long id) {
-        return studentRepository.findById(id);
+    public Optional<Student> findById(Long id) throws NotFoundException {
+        Optional<Student> student = studentRepository.findById(id);
+        if (!student.isPresent()){
+            throw new NotFoundException("có tìm thấy đâu huhu");
+        }
+        return student;
     }
 
     @Override

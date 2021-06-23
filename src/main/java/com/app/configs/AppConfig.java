@@ -1,22 +1,26 @@
 package com.app.configs;
 
+import com.app.aspect.MyLogger;
 import com.app.formatter.AddressFormatter;
 import com.app.formatter.ClassRoomFormatter;
 import com.app.formatter.LocalDateFormatter;
 import com.app.service.address.AddressService;
 import com.app.service.classroom.ClassRoomService;
+
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -25,6 +29,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -46,7 +51,13 @@ import java.util.Properties;
 @EnableTransactionManagement
 @EnableJpaRepositories("com.app.repository")
 @ComponentScan("com.app")
-@PropertySource("classpath:messages.properties")
+@PropertySources({
+        @PropertySource(value = "classpath:upload_file.properties",name = "upload-file")
+//        ,
+//        @PropertySource(value = "classpath:messages.properties",name = "messages")
+})
+@EnableAspectJAutoProxy
+@EnableSpringDataWebSupport
 public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
 
     private ApplicationContext applicationContext;
@@ -135,7 +146,7 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
         return transactionManager;
     }
 
-    //Cấu hình upload file
+//    Cấu hình upload file
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/image/**")
@@ -143,6 +154,20 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
         System.out.println(fileUpload);
 
     }
+//    @Autowired
+//    Environment env;
+//
+//    // Cấu hình để sử dụng các file nguồn tĩnh (css, image, js..)
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//
+//        String fileUpload = env.getProperty("file_upload").toString();
+//
+//        // Image resource.
+//        registry.addResourceHandler("/image/**") //
+//                .addResourceLocations("file:" + fileUpload);
+//        System.out.println(fileUpload);
+//    }
 
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver getResolver() throws IOException {
@@ -150,12 +175,23 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware {
         resolver.setMaxUploadSizePerFile(52428800);
         return resolver;
     }
-    @Bean("messageSource")
+    @Bean
     public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource=new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:messages");
+        ResourceBundleMessageSource messageSource=new ResourceBundleMessageSource();
+        messageSource.setBasename("messages");
         messageSource.setDefaultEncoding("UTF-8");
-        messageSource.setUseCodeAsDefaultMessage(true);
         return messageSource;
     }
+    @Bean
+    public LocalValidatorFactoryBean getValidator() {
+        LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
+        bean.setValidationMessageSource(messageSource());
+        return bean;
+    }
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
+
 }

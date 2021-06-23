@@ -1,5 +1,10 @@
 package com.app.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -12,14 +17,22 @@ public class Student {
 
     @ManyToOne
     @JoinColumn(name = "class_id")
+    //jsonignore là để tránh xung đột
+    @JsonIgnore
+    @JsonProperty
+    //set thuộc tính json theo lấy ra theo trường
     private ClassRoom classRoom;
 
     @ManyToOne
+    @JsonIgnore
+    @JsonProperty
     @JoinColumn(name = "address_id")
     private Address address;
 
     private String name;
 
+    //lưu vào lấy ra json dạng date
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dob;
 
     private String image;

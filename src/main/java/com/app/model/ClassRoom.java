@@ -1,6 +1,9 @@
 package com.app.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
@@ -14,12 +17,17 @@ public class ClassRoom {
     private Long id;
 
     @OneToMany(targetEntity = Student.class)
+    @JsonIgnore
     List<Student> students;
+
+
     @ManyToMany
     @JoinTable(name = "teacher_class",
             joinColumns = @JoinColumn(name = "classroom_id"),
             inverseJoinColumns = @JoinColumn(name = "teacher_id"))
+    @JsonIgnore
     Set<Teacher> teachers = new HashSet<>();
+
     private String name;
 
     public Long getId() {

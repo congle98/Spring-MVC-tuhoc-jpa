@@ -1,6 +1,7 @@
 package com.app.controller;
 
 
+import com.app.exception.NotFoundException;
 import com.app.model.Address;
 import com.app.model.Student;
 import com.app.service.address.IAddressService;
@@ -57,7 +58,7 @@ public class AddressController {
     }
 
     @GetMapping("/findStudents/{id}")
-    public ModelAndView showStudents(@PathVariable Long id){
+    public ModelAndView showStudents(@PathVariable Long id) throws NotFoundException {
         Optional<Address> address = addressService.findById(id);
         Iterable<Student> students = studentService.findAllByAddress(address.get());
         ModelAndView modelAndView = new ModelAndView("address/showStudents");

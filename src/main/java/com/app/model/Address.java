@@ -3,6 +3,9 @@ package com.app.model;
 
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
@@ -18,15 +21,22 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //Long thì nếu ko có nó sẽ trả về null
+    // còn kiểu thường như long hay int thì ko có nó sẽ trả về kiểu mặc định là 0
+
+
+    //jsonIgnore để tránh xung đột lấy json
     @OneToMany(targetEntity = Student.class)
+    @JsonIgnore
     private List<Student> students;
 
     @OneToMany(targetEntity = Teacher.class)
+    @JsonIgnore
     private List<Teacher> teachers;
 
-    @NotEmpty(message = "ngu quá mày ơi")
-    @Email(message = "lỗi cmnr")
-    @Size(min = 2, max = 30)
+
+
+    @Size(min = 2, max = 30,message = "{nameError}")
     private String name;
 
     public Address() {

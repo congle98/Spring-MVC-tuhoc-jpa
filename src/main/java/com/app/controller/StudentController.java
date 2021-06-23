@@ -1,6 +1,7 @@
 package com.app.controller;
 
 
+import com.app.exception.NotFoundException;
 import com.app.model.Address;
 import com.app.model.ClassRoom;
 import com.app.model.Student;
@@ -91,7 +92,7 @@ public class StudentController {
         return  modelAndView;
     }
     @GetMapping("/update/{id}")
-    public ModelAndView updateForm(@PathVariable Long id){
+    public ModelAndView updateForm(@PathVariable Long id) throws NotFoundException {
         ModelAndView modelAndView = new ModelAndView("student/edit");
         Optional<Student> student = studentService.findById(id);
         StudentForm studentForm = new StudentForm();
@@ -105,7 +106,7 @@ public class StudentController {
     }
 
     @PostMapping("/update")
-    private String update(StudentForm studentForm, RedirectAttributes redirectAttributes){
+    private String update(StudentForm studentForm, RedirectAttributes redirectAttributes) throws NotFoundException {
         Optional<Student> student = studentService.findById(studentForm.getId());
         student.get().setName(studentForm.getName());
         student.get().setAddress(studentForm.getAddress());
@@ -151,7 +152,7 @@ public class StudentController {
 //    }
 
     @GetMapping("/delete/{id}")
-    public ModelAndView deleteForm(@PathVariable Long id){
+    public ModelAndView deleteForm(@PathVariable Long id) throws NotFoundException {
         Optional<Student> student = studentService.findById(id);
         ModelAndView modelAndView = new ModelAndView("student/delete");
         modelAndView.addObject("student",student);
@@ -181,4 +182,11 @@ public class StudentController {
 //            studentService.remove(id);
 //            return studentList();
 //    }
+
+
+    @ExceptionHandler(NotFoundException.class)
+    public ModelAndView notFoundException(){
+        ModelAndView modelAndView = new ModelAndView("error");
+        return modelAndView;
+    }
 }
